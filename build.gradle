@@ -1,0 +1,61 @@
+task wrapper(type: Wrapper) { gradleVersion = '2.12' }
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url  "http://dl.bintray.com/dpeger/steamkit" }
+    }
+
+    dependencies {
+        classpath group: 'de.peger.steamkit', name: 'steamkit-steamlang-gradle', version: '1.0.0-beta-1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
+apply from: "${rootProject.rootDir}/gradle/publish.gradle"
+apply from: "${rootProject.rootDir}/gradle/bintray.gradle"
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'de.peger.steamd'
+
+sourceCompatibility = 1.8
+
+group = 'de.peger.steamkit'
+version = '1.0.0-beta-1'
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+repositories {
+    jcenter()
+    maven { url  "http://dl.bintray.com/dpeger/steamkit" }
+}
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.0.0-beta-2'
+
+    compile (group: 'de.peger.steamkit', name: 'steamkit-proto-gc', version: '1.0.0-beta-1')
+    compile (group: 'de.peger.steamkit', name: 'steamkit-proto-steamclient', version: '1.0.0-beta-1')
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar { manifest.attributes provider: 'Daniel H. Peger' }
+
+
+steamd {
+    outputPackages = [
+        'emsg.steamd'            : 'base',
+        'enums.steamd'           : 'enums',
+        'eresult.steamd'         : 'base',
+        'gamecoordinator.steamd' : 'gc',
+        'header.steamd'          : 'header',
+        'netheader.steamd'       : 'netheader',
+        'steammsg.steamd'        : 'msg'
+    ]
+
+    importPackages = [
+        'SteamKit2.GC.Internal' : 'org.opensteamworks.steamkit.proto.gc',
+        'SteamKit2.Internal'    : 'org.opensteamworks.steamkit.proto.steamclient'
+    ]
+}

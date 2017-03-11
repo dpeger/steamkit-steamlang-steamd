@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 public class ProtoBufUtil {
 
     @SuppressWarnings("unchecked")
-    public static <T> T parseFrom(final ByteBuffer pBuffer, int pSize, final Class<T> pProtoBufClass) {
+    public static <T> T parseFrom(final ByteBuffer pBuffer, final int pSize, final Class<T> pProtoBufClass) {
 
         final byte[] tTempProto = new byte[pSize];
         pBuffer.get(tTempProto);

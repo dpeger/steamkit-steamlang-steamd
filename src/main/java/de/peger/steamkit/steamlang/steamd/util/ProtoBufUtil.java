@@ -21,9 +21,10 @@ public class ProtoBufUtil {
         } catch (final NoSuchMethodException e) {
             throw new IllegalStateException(
                     "Expected '" + pProtoBufClass.getCanonicalName() + ".parseFrom(byte[])' to be present.", e);
-        } catch (final IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException(
-                    e instanceof InvocationTargetException ? ((InvocationTargetException) e).getTargetException() : e);
+        } catch (final InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getTargetException());
+        } catch (final IllegalAccessException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }
